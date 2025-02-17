@@ -28,6 +28,8 @@ DeviceInfo
 | order by Timestamp asc
 ```
 
+ ![alt text](http://url/to/img.png)
+
 ✅ Findings
 
 Windows-Target-1 has been internet-facing since 1/11/2025.
@@ -43,6 +45,7 @@ DeviceLogonEvents
 | summarize Attempts = count() by ActionType, RemoteIP, DeviceName
 | order by Attempts desc
 ```
+ ![alt text](http://url/to/img.png)
 
 ✅ Findings
 
@@ -57,6 +60,7 @@ DeviceLogonEvents
 | where ActionType == "LogonSuccess"
 | where RemoteIP has_any(RemoteIPsInQuestion)
 ```
+ ![alt text](http://url/to/img.png)
 
 ✅ Findings
 
@@ -105,6 +109,9 @@ DeviceLogonEvents
 | summarize LoginCount = count() by DeviceName, ActionType, AccountName, RemoteIP
 | order by LoginCount
 ```
+
+ ![alt text](http://url/to/img.png)
+ ![alt text](http://url/to/img.png)
 
 ✅ Findings
 
