@@ -1,4 +1,4 @@
-# 🔍 **Investigation Report: Misconfigured Internet-Facing VM & Brute-Force Attempts**
+# **Investigation Report: Misconfigured Internet-Facing VM & Brute-Force Attempts**
 
 ---
 
@@ -8,16 +8,16 @@ The goal was to **identify any misconfigured VMs** and check for **potential bru
 
 ---
 
-## 🔎 **Description**
+## **Description**
 - Some **older devices do not have account lockout policies configured**, increasing the risk of **brute-force login success**.
 - **Windows-Target-1** was **exposed to the internet** for an extended period.
 - Investigation was conducted to determine whether **unauthorized access** occurred.
 
 ---
 
-## 🕵️ **Timeline & Findings**  
+## **Timeline & Findings**  
 
-### **1️⃣ Identifying Exposed VM**
+### **Identifying Exposed VM**
 I queried **Azure Defender** to check if any VMs were **publicly accessible**.
 
 #### 📜 **Query**
@@ -30,10 +30,10 @@ DeviceInfo
 
  ![alt text](https://github.com/K-ING-TECH/Threat-Hunt_Misconfigured-Server/blob/main/img1.png)
 
-✅ Findings
+#### Findings:
 
 Windows-Target-1 has been internet-facing since 1/11/2025.
-### 2️⃣ Detecting Brute-Force Login Attempts
+### Detecting Brute-Force Login Attempts
 I checked for failed login attempts from external IP addresses.
 
 📜 Query
@@ -47,10 +47,10 @@ DeviceLogonEvents
 ```
  ![alt text](https://github.com/K-ING-TECH/Threat-Hunt_Misconfigured-Server/blob/main/img2.png)
 
-✅ Findings
+#### Findings:
 
 Brute-force attempts were made from multiple external IPs.
-### 3️⃣ Checking for Successful Logins from Malicious IPs
+### Checking for Successful Logins from Malicious IPs
 I searched for any successful logins from the top 5 IP addresses that attempted brute-force attacks.
 
 📜 Query
@@ -62,10 +62,10 @@ DeviceLogonEvents
 ```
  ![alt text](https://github.com/K-ING-TECH/Threat-Hunt_Misconfigured-Server/blob/main/img3.png)
 
-✅ Findings
+#### Findings:
 
-❌ None of these IP addresses successfully logged in.
-### 4️⃣ Checking Account Activity
+None of these IP addresses successfully logged in.
+### Checking Account Activity
 I analyzed user accounts logging into the device over the past 30 days.
 
 📜 Query
@@ -77,10 +77,10 @@ DeviceLogonEvents
 | distinct AccountName
 ```
 
-✅ Findings
+#### Findings:
 
 The only successful logins were from “labuser”.
-### 5️⃣ Analyzing “labuser” Account Activity
+### Analyzing “labuser” Account Activity
 I checked how often the "labuser" account was successfully logging in.
 
 📜 Query
@@ -93,10 +93,10 @@ DeviceLogonEvents
 | summarize count()
 ```
 
-✅ Findings
+#### Findings:
 
 labuser successfully logged in 39 times over the past month, with 0 failed attempts.
-### 6️⃣ Verifying Login Sources
+### Verifying Login Sources
 I reviewed all successful login IP addresses for the "labuser" account.
 
 📜 Query
@@ -113,15 +113,15 @@ DeviceLogonEvents
  ![alt text](https://github.com/K-ING-TECH/Threat-Hunt_Misconfigured-Server/blob/main/img4.png)
  ![alt text](https://github.com/K-ING-TECH/Threat-Hunt_Misconfigured-Server/blob/main/img5.png)
 
-✅ Findings
+#### Findings:
 
 No suspicious IP addresses detected.
 
-✅ Conclusion:
+### Conclusion:
 
 While Windows-Target-1 was exposed, and brute-force attempts were made, there is no evidence of unauthorized logins.
 
-## 🛡️ MITRE ATT&CK TTP Assessment
+## MITRE ATT&CK TTP Assessment
 **Tactic	Technique (ID)	Description**
 
 **Initial Access	T1110 -** Brute Force	Multiple failed login attempts observed targeting Windows-Target-1.
@@ -136,23 +136,23 @@ While Windows-Target-1 was exposed, and brute-force attempts were made, there is
 
 
 
-## 🚀 Response Plan: Mitigation & Prevention
-### 🛑 Immediate Actions
-Remove public exposure of Windows-Target-1 from the internet.
+## Response Plan: Mitigation & Prevention
+### Immediate Actions
+- Remove public exposure of Windows-Target-1 from the internet.
 
-Ensure firewall rules block direct external access unless explicitly needed.
+- Ensure firewall rules block direct external access unless explicitly needed.
 
-Restrict RDP/SSH access to only allow connections through a secure jump host or VPN.
+- Restrict RDP/SSH access to only allow connections through a secure jump host or VPN.
 
-### 🔄 Eradication Steps
+### Eradication Steps
 
-Enforce an account lockout policy for excessive failed login attempts.
+- Enforce an account lockout policy for excessive failed login attempts.
 
-Enable Multi-Factor Authentication (MFA) for all privileged and remote access accounts.
+- Enable Multi-Factor Authentication (MFA) for all privileged and remote access accounts.
 
-Review user accounts & access logs to confirm no unauthorized modifications.
+- Review user accounts & access logs to confirm no unauthorized modifications.
 
-### 🔧 Recovery & Hardening
+### Recovery & Hardening
 Conduct integrity checks on Windows-Target-1 to confirm no unauthorized system changes.
 
 Update & harden security configurations, including OS patches & endpoint protection.
@@ -160,52 +160,52 @@ Update & harden security configurations, including OS patches & endpoint protect
 Set up monitoring alerts for residual malicious activity.
 
 
-### 📡 Continuous Monitoring & Detection
+### Continuous Monitoring & Detection
 
-Azure Sentinel Alerts for:
+- Azure Sentinel Alerts for:
 
-Unusual login attempts from external IPs.
+- Unusual login attempts from external IPs.
 
-Anomalous authentication patterns (e.g., logins from new locations).
+- Anomalous authentication patterns (e.g., logins from new locations).
 
-Repeated failed login attempts exceeding thresholds.
+- Repeated failed login attempts exceeding thresholds.
 
-Deploy Microsoft Defender for Identity to track suspicious credential-based activity.
+- Deploy Microsoft Defender for Identity to track suspicious credential-based activity.
 
-Conduct periodic security assessments to validate access configurations.
+- Conduct periodic security assessments to validate access configurations.
 
-## 🏆 Lessons Learned
- Misconfigured Internet-Facing VMs Introduce Risks
+## Lessons Learned
+- Misconfigured Internet-Facing VMs Introduce Risks
 
-Windows-Target-1 was exposed, leading to brute-force attempts.
+- Windows-Target-1 was exposed, leading to brute-force attempts.
 
-Strict access controls are essential for external-facing assets.
+- Strict access controls are essential for external-facing assets.
 
- Lack of Account Lockout Policy Increases Risk
+- Lack of Account Lockout Policy Increases Risk
 
-Some older systems lacked account lockout policies, making them vulnerable.
+- Some older systems lacked account lockout policies, making them vulnerable.
 
-A strict lockout threshold should be enforced.
+- A strict lockout threshold should be enforced.
 
- Continuous Monitoring is Critical
+ - Continuous Monitoring is Critical
 
-No compromise was detected, but proactive monitoring remains crucial.
+- No compromise was detected, but proactive monitoring remains crucial.
 
-Log analysis & automated threat detection (via Sentinel KQL queries) are key.
+- Log analysis & automated threat detection (via Sentinel KQL queries) are key.
 
- Need for Network Segmentation
+ - Need for Network Segmentation
 
-Critical services like DNS, DHCP, and Domain Services should never be internet-facing.
+- Critical services like DNS, DHCP, and Domain Services should never be internet-facing.
 
-Implement strict network segmentation to prevent unintended exposure.
+- Implement strict network segmentation to prevent unintended exposure.
 
- Enhancing Incident Response Processes
+ - Enhancing Incident Response Processes
 
-Investigation was only possible due to log retention & authentication visibility.
+- Investigation was only possible due to log retention & authentication visibility.
 
-Improving logging & alerting mechanisms is essential for faster responses.
+- Improving logging & alerting mechanisms is essential for faster responses.
 
-### 📢 Detection Rule: Create Azure Sentinel Analytics Rule
+### Detection Rule: Create Azure Sentinel Analytics Rule
 To detect brute-force attempts, create an Analytics Rule in Azure Sentinel.
 
 📜 KQL Query for Detection
