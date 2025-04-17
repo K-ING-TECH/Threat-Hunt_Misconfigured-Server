@@ -28,7 +28,7 @@ DeviceInfo
 | order by Timestamp asc
 ```
 
- ![alt text](https://github.com/K-ING-TECH/Threat-Hunt_Misconfigured-Server/blob/main/img1.png)
+![Network Image 1](images/img1.png)
 
 #### Findings:
 
@@ -45,7 +45,7 @@ DeviceLogonEvents
 | summarize Attempts = count() by ActionType, RemoteIP, DeviceName
 | order by Attempts desc
 ```
- ![alt text](https://github.com/K-ING-TECH/Threat-Hunt_Misconfigured-Server/blob/main/img2.png)
+![Network Image 2](images/img2.png)
 
 #### Findings:
 
@@ -60,7 +60,7 @@ DeviceLogonEvents
 | where ActionType == "LogonSuccess"
 | where RemoteIP has_any(RemoteIPsInQuestion)
 ```
- ![alt text](https://github.com/K-ING-TECH/Threat-Hunt_Misconfigured-Server/blob/main/img3.png)
+![Network Image 3](images/img3.png)
 
 #### Findings:
 
@@ -110,8 +110,10 @@ DeviceLogonEvents
 | order by LoginCount
 ```
 
- ![alt text](https://github.com/K-ING-TECH/Threat-Hunt_Misconfigured-Server/blob/main/img4.png)
- ![alt text](https://github.com/K-ING-TECH/Threat-Hunt_Misconfigured-Server/blob/main/img5.png)
+
+![Network Image 4](images/img4.png)
+
+![Network Image 4](images/img5.png)
 
 #### Findings:
 
